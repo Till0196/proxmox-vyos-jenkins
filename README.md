@@ -1,3 +1,72 @@
+## Proxmox Vyos Jenkins
+Proxmoxにterraformを用いて、vyosのLTSビルドに必要なパッケージをビルドできる仮想マシンを自動で構築します。
+iso生成とcloudinitが使えるcloudimageを生成するjobもJenkinsに追加します。
+
+利用可能なVyosのLTSバージョン
+- sagitta (1.4)
+- equuleus (1.3)
+
+## terraform modules
+- proxmox-cloud-image
+
+  Proxmoxノードにclouimageをダウンロードして、ファイルを生成します。
+  `node_names`はリスト型を受け付けます。
+  `data.proxmox_virtual_environment_nodes`でノード情報を取得し、その情報からnodeを登録しています。
+  複数のProxmoxからなるProxmoxクラスターになっている場合、全てのProxmoxクラスターにイメージが追加されます。
+  後述するproxmox-cloud-imageは単一ノードでの実行を前提としているため、仮想マシンを構築しない使用しないノードであってもcloud-imageが登録されます。
+
+- proxmox-cloud-image-vm
+
+  proxmox-cloud-imageでダウンロードしたcloud-imageとcloud-initを用いてUbuntu24.04をセットアップします。
+  isoからcloud-imageファイルを作成するvyos-packerでqemuによるKVMを利用できるようにするため、`cpu_type = host`である必要があります。
+  また、ProxmoxノードもKVMのネストが有効化されている必要があります。Proxmoxの最近のバージョンでは初期設定で有効化されています。
+
+## scripts
+- vyos-jenkins-automate-setting-wave1.sh
+
+  dd010101/vyos-jenkinsのstage1-4まで実行し、Jenkinsをセットアップします。
+  stage2(2-jenkins.sh)に対話が必要な部分がありますが、expectと補助スクリプト(jenkins-setup-helper-scripts)を用いて自動化しています。
+  adminユーザーのパスワードはterrarform内の`jenkins_admin_password`で設定した値が利用されます。
+  値が指定されていない場合、`password`がパスワードとして設定されます。
+
+  このスクリプト内の実行までは`terraform_data`リソースで実行されます。
+
+- vyos-jenkins-automate-setting-wave2.sh
+
+  `vyos-jenkins-automate-setting-wave1.sh`の最後に別のpidで呼び出されるスクリプトです。
+  terraformの実行時間があまりにも長くなるため、このような構成になっています。
+  このスクリプトがやることはdd010101/vyos-jenkinsの残りのstageを実行し、最後に`vyos-jenkins-add-build-image-job.sh`を実行します。
+
+- vyos-jenkins-add-build-image-job.sh
+
+  vyosのisoをビルドするJenkinsのjobを登録するスクリプトです。
+  `vyos-jenkins-automate-setting-wave1.sh`内でダウンロードされた`jenkins-cli`とクレデンシャルを利用してjobを追加します。
+  追加されるjobは下記の通りです。
+  - build-vyos-iso-equuleus
+
+    ビルドされたパッケージを利用してバージョンequuleus(1.3)のisoファイルを生成します。
+    実行には該当バージョンの全てのパッケージが正常にビルドされている必要があります。
+  - build-vyos-iso-sagitta
+
+    ビルドされたパッケージを利用してバージョンsagitta(1.4)のisoファイルを生成します。
+    実行には該当バージョンの全てのパッケージが正常にビルドされている必要があります。
+  - build-vyos-cloudimage-equuleus
+
+    `build-vyos-iso-equuleus`jobによって生成されたisoを使って、cloudinitが利用できるcloudimageを生成します。
+    実行には`build-vyos-iso-equuleus`jobが正常にisoを生成されている必要があります。
+  - build-vyos-cloudimage-sagitta
+
+    `build-vyos-iso-sagitta`jobによって生成されたisoを使って、cloudinitが利用できるcloudimageを生成します。
+    実行には`build-vyos-iso-sagitta`jobが正常にisoを生成されている必要があります。
+
+
+## terraform-docsについて
+READMEにterraform-docsを利用しています。
+terraform-docsをインストールし、下記コマンドをレポジトリ直下で実行すると最新の情報に更新されます。
+```bash
+terraform-docs -c .terraform-docs.yml --recursive .
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
