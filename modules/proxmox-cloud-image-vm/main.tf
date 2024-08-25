@@ -88,7 +88,7 @@ resource "proxmox_virtual_environment_file" "cloud_config" {
         password       = bcrypt(var.vm_user_password),
         apt_mirror     = var.apt_mirror,
         ssh_public_key = tolist([trimspace(var.ssh_public_key_content)])
-        ssh_pwauth     = var.ssh_pwauth ? "yes" : "no"
+        ssh_pwauth     = var.ssh_pwauth
       }
     )
     file_name = "cloud-init-${var.vm_name}.yaml"
