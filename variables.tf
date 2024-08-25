@@ -1,4 +1,4 @@
-
+#### PVE Node Variable ####
 variable "virtual_environment_endpoint" {
   type        = string
   description = "The endpoint for the Proxmox Virtual Environment API (example: https://host:port)"
@@ -32,25 +32,15 @@ variable "virtual_environment_ssh" {
   description = "The SSH configuration for the Proxmox Virtual Environment"
 }
 
+#### PVE create VM (general) Variable ####
 variable "pve_node_name" {
   type        = string
   description = "The name of the node"
 }
 
-variable "on_boot" {
-  type        = bool
-  description = "Start the VM on PVE node boot"
-  default     = true
-}
-
 variable "vm_name" {
   type        = string
   description = "The name of the VM"
-}
-
-variable "fqdn" {
-  type        = string
-  description = "The FQDN of the VM"
 }
 
 variable "vm_id" {
@@ -64,6 +54,13 @@ variable "vm_tags" {
   default     = ["terraform-managed"]
 }
 
+variable "on_boot" {
+  type        = bool
+  description = "Start the VM on PVE node boot"
+  default     = true
+}
+
+#### PVE create VM (CPU & memory) Variable ####
 variable "cpu" {
   type        = number
   description = "The number of CPUs for the VM"
@@ -80,10 +77,23 @@ variable "memory" {
   description = "The amount of memory for the VM"
 }
 
+#### PVE create VM (disk) variable ####
+variable "os_datastore_lvm_name" {
+  type        = string
+  description = "The OS datastore LVM name"
+  default     = "local-lvm"
+}
+
+variable "disk_size" {
+  type        = number
+  description = "The disk size for the VM"
+}
+
+#### PVE create VM (network) variable ####
 variable "bridge_name" {
   type        = string
   description = "The bridge name for the VM"
-  default = "vmbr0"
+  default     = "vmbr0"
 }
 
 variable "dhcp" {
@@ -95,13 +105,13 @@ variable "dhcp" {
 variable "ip" {
   type        = string
   description = "The IP address for the VM"
-  default   = ""
+  default     = ""
 }
 
 variable "cidr" {
   type        = string
   description = "The CIDR for the VM"
-  default    = ""
+  default     = ""
 }
 
 variable "gateway" {
@@ -110,21 +120,35 @@ variable "gateway" {
   default     = ""
 }
 
-variable "os_datastore_lvm_name" {
-  type        = string
-  description = "The OS datastore LVM name"
-  default    = "local-lvm"
+variable "dns_servers" {
+  type        = list(string)
+  description = "The DNS servers"
+  default     = ["1.1.1.1", "8.8.8.8"]
 }
 
-variable "disk_size" {
-  type        = number
-  description = "The disk size for the VM"
-}
-
+#### PVE create VM (cloud-init) variable ####
 variable "cloud_config_datastore_name" {
   type        = string
   description = "The name of the datastore for the cloud config file (Content type snippets must be enabled)"
   default     = "local"
+}
+
+variable "vm_user" {
+  type        = string
+  description = "The VM user"
+  default     = "ubuntu"
+}
+
+variable "vm_user_password" {
+  type        = string
+  description = "The VM user password"
+  default     = "password"
+  sensitive   = true
+}
+
+variable "fqdn" {
+  type        = string
+  description = "The FQDN of the VM"
 }
 
 variable "timezone" {
@@ -145,35 +169,16 @@ variable "apt_mirror" {
   default     = "https://ftp.udx.icscoe.jp/Linux/ubuntu"
 }
 
-variable "vm_user" {
-  type        = string
-  description = "The VM user"
-  default = "ubuntu"
-}
-
-variable "vm_user_password" {
-  type        = string
-  description = "The VM user password"
-  default     = "password"
-  sensitive   = true
-}
-
 variable "ssh_pwauth" {
   type        = bool
   description = "Enable password authentication"
   default     = false
 }
 
-variable "dns_servers" {
-  type        = list(string)
-  description = "The DNS servers"
-  default     = ["1.1.1.1", "8.8.8.8"]
-}
-
+#### vyos-jenkins variable ####
 variable "jenkins_admin_password" {
-  type = string
+  type        = string
   description = "The Jenkins admin password"
-  default = "password"
-  sensitive = true
+  default     = "password"
+  sensitive   = true
 }
-

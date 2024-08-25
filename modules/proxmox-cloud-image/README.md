@@ -26,15 +26,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_file_name"></a> [file\_name](#input\_file\_name) | File name of the cloud image | `string` | n/a | yes |
+| <a name="input_url"></a> [url](#input\_url) | URL of the cloud image | `string` | n/a | yes |
 | <a name="input_content_type"></a> [content\_type](#input\_content\_type) | Content type of the cloud image | `string` | `"iso"` | no |
 | <a name="input_datastore_id"></a> [datastore\_id](#input\_datastore\_id) | Datastore ID for the cloud image | `string` | `"local"` | no |
-| <a name="input_file_name"></a> [file\_name](#input\_file\_name) | File name of the cloud image | `string` | n/a | yes |
-| <a name="input_node_name"></a> [node\_name](#input\_node\_name) | Node name for the cloud image | `string` | `"pve"` | no |
-| <a name="input_url"></a> [url](#input\_url) | URL of the cloud image | `string` | n/a | yes |
+| <a name="input_node_names"></a> [node\_names](#input\_node\_names) | Node name list for the cloud image | `list(string)` | <pre>[<br>  "pve"<br>]</pre> | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_file_id"></a> [file\_id](#output\_file\_id) | cloud image file file\_id |
+| <a name="output_file_ids"></a> [file\_ids](#output\_file\_ids) | file IDs of the cloud image |
 <!-- END_TF_DOCS -->

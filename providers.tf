@@ -7,7 +7,7 @@ provider "proxmox" {
     dynamic "node" {
       for_each = var.virtual_environment_ssh.node
       content {
-        name = node.value.name
+        name    = node.value.name
         address = node.value.address
       }
     }

@@ -33,9 +33,5 @@ write_files:
     ExecStart=
     ExecStart=-/sbin/agetty --autologin ${username} --noclear %I 38400 linux
 runcmd:
-%{ if ssh_pwauth == 'true' }
-- sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-- sed -i 's/KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/g' /etc/ssh/sshd_config
-%{ endif }
 - systemctl enable qemu-guest-agent
 - systemctl start qemu-guest-agent

@@ -18,46 +18,46 @@ module "proxmox_cloud_image_vm" {
 
   pve_node_name = var.pve_node_name
 
+  vm_name = var.vm_name
+  vm_id   = var.vm_id
+  vm_tags = var.vm_tags
+
   on_boot = var.on_boot
 
-  vm_name = var.vm_name
-  vm_tags = var.vm_tags
-  fqdn = var.fqdn
-
-  vm_id = var.vm_id
-
-  cpu = var.cpu
+  cpu      = var.cpu
   cpu_type = var.cpu_type
-  memory = var.memory
-
-  bridge_name = var.bridge_name
-  dhcp = var.dhcp
-  dns_servers = var.dns_servers
-  ip = var.ip
-  cidr = var.cidr
-  gateway = var.gateway
-  
-  cloud_image_file_id = module.proxmox_cloud_image.file_ids[var.pve_node_name].id
+  memory   = var.memory
 
   os_datastore_lvm_name = var.os_datastore_lvm_name
-  disk_size = var.disk_size
+  disk_size             = var.disk_size
 
+  bridge_name = var.bridge_name
+  dhcp        = var.dhcp
+  ip          = var.ip
+  cidr        = var.cidr
+  gateway     = var.gateway
+  dns_servers = var.dns_servers
+
+  cloud_image_file_id         = module.proxmox_cloud_image.file_ids[var.pve_node_name].id
   cloud_config_datastore_name = var.cloud_config_datastore_name
+  vm_user                     = var.vm_user
+  vm_user_password            = var.vm_user_password
+  fqdn                        = var.fqdn
 
-  timezone = var.timezone
-
-  vm_user = var.vm_user
-  vm_user_password = var.vm_user_password
+  timezone   = var.timezone
+  locale     = var.locale
+  apt_mirror = var.apt_mirror
+  ssh_pwauth = var.ssh_pwauth
 
   ssh_public_key_content = tls_private_key.ssh_private_key.public_key_openssh
 }
 
 resource "terraform_data" "setup_vyos_jenkins" {
   connection {
-    type         = "ssh"
-    user         = var.vm_user
-    private_key  = tls_private_key.ssh_private_key.private_key_pem
-    host         = module.proxmox_cloud_image_vm.cloud_image_vm.ip
+    type        = "ssh"
+    user        = var.vm_user
+    private_key = tls_private_key.ssh_private_key.private_key_pem
+    host        = module.proxmox_cloud_image_vm.cloud_image_vm.ip
   }
 
   provisioner "remote-exec" {

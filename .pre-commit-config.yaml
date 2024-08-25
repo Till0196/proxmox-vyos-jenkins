@@ -1,22 +1,22 @@
 repos:
-- repo: https://github.com/gitleaks/gitleaks
-  rev: v8.18.2
-  hooks:
-  - id: gitleaks
 - repo: https://github.com/tofuutils/pre-commit-opentofu
   rev: v1.0.2
   hooks:
   - id: tofu_fmt
+    args:
+    - '--args=-no-color'
+    - '--args=-write=false'
   - id: tofu_docs
     args:
-    - '--args=--lockfile=false'
-    - '--args=--output-file=README.md'
-  - id: opentofu_tflint
+    - '--args=--config=.terraform-docs.yml'
+  - id: tofu_tflint
     args:
     - '--args=--recursive'
   - id: tofu_validate
+    args:
+    - '--args=-no-color'
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.5.0
+  rev: v4.6.0
   hooks:
   - id: end-of-file-fixer
   - id: trailing-whitespace

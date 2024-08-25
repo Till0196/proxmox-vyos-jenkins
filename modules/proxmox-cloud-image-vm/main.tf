@@ -3,11 +3,11 @@ resource "proxmox_virtual_environment_vm" "cloud_image_vm" {
   name      = var.vm_name
   tags      = var.vm_tags
   node_name = var.pve_node_name
-  
+
   on_boot = var.on_boot
 
-  machine   = "q35"
-  bios      = "ovmf"
+  machine = "q35"
+  bios    = "ovmf"
 
   cpu {
     cores = var.cpu
@@ -27,8 +27,8 @@ resource "proxmox_virtual_environment_vm" "cloud_image_vm" {
 
     ip_config {
       ipv4 {
-        address = "${var.dhcp ? "dhcp" : "${var.ip}/${var.cidr}"}"
-        gateway = "${var.dhcp ? null : "${var.gateway}"}"
+        address = var.dhcp ? "dhcp" : "${var.ip}/${var.cidr}"
+        gateway = var.dhcp ? null : var.gateway
       }
     }
 
@@ -60,7 +60,7 @@ resource "proxmox_virtual_environment_vm" "cloud_image_vm" {
   disk {
     datastore_id = var.os_datastore_lvm_name
     file_id      = var.cloud_image_file_id
-    file_format = "raw"
+    file_format  = "raw"
     interface    = "virtio0"
     iothread     = true
     discard      = "on"
@@ -78,7 +78,7 @@ resource "proxmox_virtual_environment_file" "cloud_config" {
   node_name    = var.pve_node_name
 
   source_raw {
-    data      = templatefile("${path.module}/cloud-init/cloud-init.yaml.tpl",
+    data = templatefile("${path.module}/cloud-init/cloud-init.yaml.tpl",
       {
         hostname       = var.vm_name,
         fqdn           = var.fqdn,
@@ -87,7 +87,7 @@ resource "proxmox_virtual_environment_file" "cloud_config" {
         username       = var.vm_user,
         password       = bcrypt(var.vm_user_password),
         apt_mirror     = var.apt_mirror,
-        ssh_public_key = tolist([trimspace(var.ssh_public_key_content)])
+        ssh_public_key = tolist([trimspace(var.ssh_public_key_content)]),
         ssh_pwauth     = var.ssh_pwauth
       }
     )

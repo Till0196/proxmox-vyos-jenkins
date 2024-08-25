@@ -50,6 +50,12 @@ variable "memory" {
 }
 
 #### PVE create VM (disk) variable ####
+variable "os_datastore_lvm_name" {
+  type        = string
+  description = "The name of the LVM datastore for the OS"
+  default     = "local-lvm"
+}
+
 variable "disk_size" {
   type        = number
   description = "The size of the disk"
@@ -72,13 +78,13 @@ variable "dhcp" {
 variable "ip" {
   type        = string
   description = "The IP address for the VM"
-  default = ""
+  default     = ""
 }
 
 variable "cidr" {
   type        = string
   description = "The CIDR for the VM"
-  default = ""
+  default     = ""
 }
 
 variable "gateway" {
@@ -93,19 +99,13 @@ variable "dns_servers" {
   default     = ["1.1.1.1", "8.8.8.8"]
 }
 
-#### cloud-image variable ####
+#### PVE create VM (cloud-image) variable ####
 variable "cloud_image_file_id" {
   type        = string
   description = "The cloud image file ID"
 }
 
-variable "os_datastore_lvm_name" {
-  type        = string
-  description = "The name of the LVM datastore for the OS"
-  default     = "local-lvm"
-}
-
-#### cloud-init variable ####
+#### PVE create VM (cloud-init) variable ####
 variable "cloud_config_datastore_name" {
   type        = string
   description = "The name of the datastore for the cloud config file (Content type snippets must be enabled)"
@@ -119,9 +119,9 @@ variable "vm_user" {
 }
 
 variable "vm_user_password" {
-  type       = string
+  type        = string
   description = "The password for logging in"
-  default    = "password"
+  default     = "password"
 }
 
 variable "fqdn" {
