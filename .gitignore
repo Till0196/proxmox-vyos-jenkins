@@ -1,6 +1,3 @@
-auth.tf
-ssh/
-
 # Local .terraform directories
 **/.terraform/*
 
