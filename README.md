@@ -66,6 +66,7 @@ terraform-docsをインストールし、下記コマンドをレポジトリ直
 ```bash
 terraform-docs -c .terraform-docs.yml --recursive .
 ```
+`pre-commit`がインストールされている環境の場合は、コミット時に自動で更新と作成が行われます。
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
