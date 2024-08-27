@@ -30,7 +30,7 @@ iso生成とcloudinitが使えるcloudimageを生成するjobもJenkinsに追加
 ## scripts
 - vyos-jenkins-automate-setting-wave1.sh
 
-  dd010101/vyos-jenkinsのstage1-4まで実行し、Jenkinsをセットアップします。
+  [dd010101/vyos-jenkins](https://github.com/dd010101/vyos-jenkins)のstage1-4まで実行し、Jenkinsをセットアップします。
 
   stage2(2-jenkins.sh)に対話が必要な部分がありますが、expectと補助スクリプト(jenkins-setup-helper-scripts)を用いて自動化しています。
 
@@ -67,12 +67,16 @@ iso生成とcloudinitが使えるcloudimageを生成するjobもJenkinsに追加
     実行には該当バージョンの全てのパッケージが正常にビルドされている必要があります。
   - build-vyos-cloudimage-equuleus
 
-    `build-vyos-iso-equuleus`jobによって生成されたisoを使って、cloudinitが利用できるcloudimageを生成します。
+    `build-vyos-iso-equuleus`jobによって生成されたisoを使って、cloudinitが利用できるcloudimageをpackerで生成します。
+
+    packerでの処理は[vyos-contrib/packer-vyos](https://github.com/vyos-contrib/packer-vyos)に依存しています。
 
     実行には`build-vyos-iso-equuleus`jobが正常にisoを生成されている必要があります。
   - build-vyos-cloudimage-sagitta
 
     `build-vyos-iso-sagitta`jobによって生成されたisoを使って、cloudinitが利用できるcloudimageを生成します。
+
+    packerでの処理は[vyos-contrib/packer-vyos](https://github.com/vyos-contrib/packer-vyos)に依存しています。
 
     実行には`build-vyos-iso-sagitta`jobが正常にisoを生成されている必要があります。
 
