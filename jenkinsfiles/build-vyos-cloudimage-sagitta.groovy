@@ -28,6 +28,7 @@ pipeline {
                         make init
                         cp vyos-1.4.pkrvars.hcl local-vyos-1.4.pkrvars.hcl
                         sed -i -E "s|vm_name\\s*=\\s*\\"[^\\"]*\\"|vm_name = \\"${ISO_NAME}\\"|g" local-vyos-1.4.pkrvars.hcl
+                        sed -i -E "s|cloud_init\\s*=\\s*\\"debian\\"|cloud_init = \\"vyos\\"|g" local-vyos-1.4.pkrvars.hcl
                         sed -i -E "s|headless\\s*=\\s*false|headless = true|g" local-vyos-1.4.pkrvars.hcl
                     '''
                 }
