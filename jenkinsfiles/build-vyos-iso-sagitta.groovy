@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DATE = sh(script: 'date +%Y%m%d', returnStdout: true).trim()
-        CUSTOM_PACKAGES = 'vyos-1x-smoketest'
+        CUSTOM_PACKAGES = 'vyos-1x-smoketest cloud-init'
         APT_KEY_URL = 'http://172.17.17.17/apt.gpg.key'
         VYOS_BUILD_REPO = 'https://github.com/dd010101/vyos-build'
         VYOS_1X_REPO = 'https://github.com/vyos/vyos-1x.git'
@@ -65,7 +65,7 @@ pipeline {
                             --version "$RELEASE_NAME" \
                             --vyos-mirror http://172.17.17.17/sagitta \
                             --custom-apt-key /opt/apt.gpg.key \
-                            --custom-package "$customPackages"
+                            --custom-package \"$customPackages\"
                         docker run --rm --privileged -v ./vyos-build/:/vyos -v "./apt.gpg.key:/opt/apt.gpg.key" -w /vyos --sysctl net.ipv6.conf.lo.disable_ipv6=0 -e GOSU_UID=$(id -u) -e GOSU_GID=$(id -g) -w /vyos vyos/vyos-build:sagitta \
                              sudo chown -R $(id -u):$(id -g) build
                     '''
