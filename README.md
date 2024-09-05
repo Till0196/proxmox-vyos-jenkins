@@ -16,6 +16,7 @@ iso生成とcloudinitが使えるcloudimageを生成するjobもJenkinsに追加
   `data.proxmox_virtual_environment_nodes`でノード情報を取得し、その情報からnodeを登録しています。
 
   複数のProxmoxからなるProxmoxクラスターになっている場合、全てのProxmoxクラスターにイメージが追加されます。
+  特定のProxmoxノードにだけイメージをダウンロードしたい場合、`node_names = [ "pve" ]`のようにリスト型でノード名を指定することで実現できます。
 
   後述するproxmox-cloud-imageは単一ノードでの実行を前提としているため、仮想マシンを構築しない使用しないノードであってもcloud-imageが登録されます。
 
